@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="1_schema_management_table" author="Sofus">
+    <createTable tableName="SCHEMA_GENERATION">
+      <column name="KEY_NAME" type="VARCHAR(200)">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="CLASS_NAME" type="VARCHAR(200)">
+        <constraints nullable="false" />
+      </column>
+      <column name="ROOT_NAME" type="VARCHAR(200)">
+        <constraints nullable="false" />
+      </column>
+      <column name="NAME_LENGTH" type="NUMBER(6)">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="2_support_json_schema_management_table" author="Sofus">
+    <dropNotNullConstraint tableName="SCHEMA_GENERATION" columnName="ROOT_NAME" />
+  </changeSet>
+
+  <changeSet id="3_support_resolver_id" author="Sofus">
+    <addColumn tableName="SCHEMA_GENERATION">
+      <column name="RESOLVER_ID" type="VARCHAR(250)" />
+    </addColumn>
+    <sql>
+      UPDATE SCHEMA_GENERATION
+      SET RESOLVER_ID = 'SimpleTableResolver'
+    </sql>
+    <addNotNullConstraint tableName="SCHEMA_GENERATION" columnName="RESOLVER_ID" />
+  </changeSet>
+
+</databaseChangeLog>
